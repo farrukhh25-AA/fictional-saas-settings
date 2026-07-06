@@ -1,0 +1,7 @@
+node_modules
+dist
+.npm-cache
+.repo-git
+.env
+.env.local
+*.local
