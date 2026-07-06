@@ -1,16 +1,41 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { SettingsLayout } from './layout/SettingsLayout';
+import { IntegrationsPage } from './pages/IntegrationsPage';
+import { ProfilePage } from './pages/ProfilePage';
+import { TeamPage } from './pages/TeamPage';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 30_000,
+      retry: 1,
+    },
+  },
+});
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Navigate to="/settings/profile" replace />,
+  },
+  {
+    path: '/settings',
+    element: <SettingsLayout />,
+    children: [
+      { index: true, element: <Navigate to="/settings/profile" replace /> },
+      { path: 'profile', element: <ProfilePage /> },
+      { path: 'team', element: <TeamPage /> },
+      { path: 'integrations', element: <IntegrationsPage /> },
+    ],
+  },
+]);
+
 function App() {
   return (
-    <main className="min-h-screen bg-stone-50 px-6 py-12 text-stone-950">
-      <div className="mx-auto max-w-3xl">
-        <p className="text-sm font-medium uppercase tracking-wide text-stone-500">
-          Fictional SaaS
-        </p>
-        <h1 className="mt-4 text-4xl font-semibold">Settings workspace</h1>
-        <p className="mt-4 text-lg text-stone-600">
-          Initial React, TypeScript, Tailwind, and Vite setup.
-        </p>
-      </div>
-    </main>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   );
 }
 
