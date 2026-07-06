@@ -21,3 +21,18 @@ select,
 textarea {
   font: inherit;
 }
+
+button,
+select {
+  cursor: pointer;
+}
+
+button:disabled,
+select:disabled {
+  cursor: not-allowed;
+}
+
+::selection {
+  background: #292524;
+  color: white;
+}
