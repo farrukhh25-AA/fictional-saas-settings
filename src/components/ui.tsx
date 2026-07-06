@@ -13,12 +13,12 @@ export function Button({
       className={clsx(
         'inline-flex min-h-10 items-center justify-center gap-2 rounded-lg px-4 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-55',
         variant === 'primary' &&
-          'bg-stone-950 text-white shadow-sm shadow-stone-950/10 hover:bg-stone-800',
+          'bg-[#f2644b] text-white shadow-sm shadow-[#f2644b]/25 hover:bg-[#df563f]',
         variant === 'secondary' &&
-          'border border-stone-200 bg-white text-stone-800 hover:bg-stone-50',
+          'border border-[#e4e9ef] bg-white text-[#334155] shadow-sm shadow-slate-950/[0.04] hover:border-[#f7b4a8] hover:bg-[#fff7f4] hover:text-[#c94d38]',
         variant === 'danger' &&
-          'border border-rose-200 bg-white text-rose-700 hover:bg-rose-50',
-        variant === 'ghost' && 'text-stone-600 hover:bg-stone-100 hover:text-stone-950',
+          'border border-[#f7b4a8] bg-white text-[#c94d38] hover:bg-[#fff1ee]',
+        variant === 'ghost' && 'text-[#64748b] hover:bg-[#fff1ee] hover:text-[#c94d38]',
         className,
       )}
       {...props}
@@ -37,15 +37,15 @@ export function Field({
 }) {
   return (
     <label className="block">
-      <span className="text-sm font-medium text-stone-800">{label}</span>
+      <span className="text-sm font-medium text-[#334155]">{label}</span>
       <div className="mt-2">{children}</div>
-      {error ? <p className="mt-2 text-sm text-rose-700">{error}</p> : null}
+      {error ? <p className="mt-2 text-sm text-[#c94d38]">{error}</p> : null}
     </label>
   );
 }
 
 export const inputClass =
-  'w-full rounded-lg border border-stone-200 bg-white px-3 py-2.5 text-sm text-stone-950 outline-none transition placeholder:text-stone-400 focus:border-stone-500 focus:ring-4 focus:ring-stone-200/70';
+  'w-full rounded-lg border border-[#e4e9ef] bg-white px-3 py-2.5 text-sm text-[#172033] shadow-sm shadow-slate-950/[0.03] outline-none transition placeholder:text-[#94a3b8] focus:border-[#f2644b] focus:ring-4 focus:ring-[#f2644b]/15';
 
 export function Badge({
   children,
@@ -58,10 +58,10 @@ export function Badge({
     <span
       className={clsx(
         'inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium',
-        tone === 'neutral' && 'bg-stone-100 text-stone-700',
-        tone === 'green' && 'bg-emerald-50 text-emerald-700',
-        tone === 'amber' && 'bg-amber-50 text-amber-700',
-        tone === 'blue' && 'bg-sky-50 text-sky-700',
+        tone === 'neutral' && 'bg-[#f4f7fb] text-[#475569]',
+        tone === 'green' && 'bg-[#edf9f3] text-[#17835b]',
+        tone === 'amber' && 'bg-[#fff5df] text-[#a86707]',
+        tone === 'blue' && 'bg-[#eff6ff] text-[#2f6fad]',
       )}
     >
       {children}
@@ -79,7 +79,7 @@ export function Panel({
   return (
     <section
       className={clsx(
-        'rounded-lg border border-stone-200 bg-white shadow-sm shadow-stone-950/[0.03]',
+        'rounded-lg border border-[#e4e9ef] bg-white shadow-sm shadow-slate-950/[0.06]',
         className,
       )}
     >
@@ -89,5 +89,5 @@ export function Panel({
 }
 
 export function Skeleton({ className }: { className?: string }) {
-  return <div className={clsx('animate-pulse rounded bg-stone-200', className)} />;
+  return <div className={clsx('animate-pulse rounded bg-[#e4e9ef]', className)} />;
 }
