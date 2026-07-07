@@ -123,7 +123,7 @@ export function TeamPage() {
         </p>
       </div>
 
-      <div className="grid gap-4 2xl:grid-cols-[minmax(0,1fr)_300px]">
+      <div className="grid gap-4">
         <Panel className="overflow-hidden">
           <div className="flex flex-col gap-3 border-b border-[#e4e9ef] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
             <div>
@@ -183,7 +183,7 @@ export function TeamPage() {
           )}
         </Panel>
 
-        <Panel className="self-start p-5 sm:p-6">
+        <Panel className="w-full max-w-md self-start p-5 sm:p-6">
           <h2 className="text-lg font-semibold">Invite teammate</h2>
           <p className="mt-2 text-sm leading-6 text-[#475569]">
             New invitations stay pending until accepted.
