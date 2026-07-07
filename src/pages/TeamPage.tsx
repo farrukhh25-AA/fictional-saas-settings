@@ -1,13 +1,38 @@
 import { useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { MailPlus, RefreshCw, Trash2, UserMinus } from 'lucide-react';
+import { MailPlus, Pencil, RefreshCw, Save, Trash2, UserMinus, X } from 'lucide-react';
 import { api } from '../lib/mockApi';
 import { formatDate, initials } from '../lib/format';
-import type { Role, TeamMember } from '../types';
+import type { Role, TeamMember, UpdateMemberProfileInput } from '../types';
 import { Badge, Button, Field, Panel, Skeleton, inputClass } from '../components/ui';
 import { Toast } from '../components/Toast';
 
 const roles: Role[] = ['Admin', 'Editor', 'Viewer'];
+const memberRoles: Role[] = ['Owner', 'Admin', 'Editor', 'Viewer'];
+
+const validateMemberProfile = (
+  values: UpdateMemberProfileInput,
+  member: TeamMember,
+  members: TeamMember[],
+) => {
+  const errors: Partial<Record<keyof UpdateMemberProfileInput, string>> = {};
+  if (member.status === 'active' && !values.name.trim()) {
+    errors.name = 'Enter a name.';
+  }
+  if (!/^\S+@\S+\.\S+$/.test(values.email)) {
+    errors.email = 'Enter a valid email.';
+  }
+  if (
+    members.some(
+      (candidate) =>
+        candidate.id !== member.id &&
+        candidate.email.toLowerCase() === values.email.toLowerCase(),
+    )
+  ) {
+    errors.email = 'That email already belongs to this team.';
+  }
+  return errors;
+};
 
 export function TeamPage() {
   const queryClient = useQueryClient();
@@ -15,7 +40,8 @@ export function TeamPage() {
   const [email, setEmail] = useState('');
   const [role, setRole] = useState<Role>('Editor');
   const [formError, setFormError] = useState('');
-  const { data = [], isLoading, isError, refetch } = useQuery({
+  const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
+  const { data = [], isLoading, isFetching, isError, refetch } = useQuery({
     queryKey: ['members'],
     queryFn: api.getMembers,
   });
@@ -37,6 +63,16 @@ export function TeamPage() {
       api.updateMemberRole(id, nextRole),
     onSuccess: () => {
       setToast('Role updated.');
+      invalidate();
+    },
+  });
+
+  const updateProfile = useMutation({
+    mutationFn: ({ id, values }: { id: string; values: UpdateMemberProfileInput }) =>
+      api.updateMemberProfile(id, values),
+    onSuccess: () => {
+      setEditingMember(null);
+      setToast('Member profile updated.');
       invalidate();
     },
   });
@@ -96,9 +132,9 @@ export function TeamPage() {
                 {activeCount} active, {pendingCount} pending
               </p>
             </div>
-            <Button variant="secondary" onClick={() => refetch()} disabled={isLoading}>
-              <RefreshCw className="h-4 w-4" />
-              Refresh
+            <Button variant="secondary" onClick={() => refetch()} disabled={isLoading || isFetching}>
+              <RefreshCw className={`h-4 w-4 ${isFetching ? 'animate-spin' : ''}`} />
+              {isFetching ? 'Refreshing...' : 'Refresh'}
             </Button>
           </div>
 
@@ -131,8 +167,13 @@ export function TeamPage() {
                   }
                   onRemove={() => remove.mutate(member.id)}
                   onResend={() => resend.mutate(member.id)}
+                  onEdit={() => {
+                    updateProfile.reset();
+                    setEditingMember(member);
+                  }}
                   busy={
                     updateRole.isPending ||
+                    (updateProfile.isPending && updateProfile.variables?.id === member.id) ||
                     remove.variables === member.id ||
                     resend.variables === member.id
                   }
@@ -180,7 +221,167 @@ export function TeamPage() {
         </Panel>
       </div>
 
+      {editingMember ? (
+        <EditMemberModal
+          member={editingMember}
+          members={data}
+          isSaving={updateProfile.isPending}
+          error={updateProfile.error as Error | null}
+          onClose={() => {
+            if (!updateProfile.isPending) setEditingMember(null);
+          }}
+          onSubmit={(values) =>
+            updateProfile.mutate({ id: editingMember.id, values })
+          }
+        />
+      ) : null}
+
       <Toast message={toast} onDismiss={() => setToast(null)} />
+    </div>
+  );
+}
+
+function EditMemberModal({
+  member,
+  members,
+  isSaving,
+  error,
+  onClose,
+  onSubmit,
+}: {
+  member: TeamMember;
+  members: TeamMember[];
+  isSaving: boolean;
+  error: Error | null;
+  onClose: () => void;
+  onSubmit: (values: UpdateMemberProfileInput) => void;
+}) {
+  const [values, setValues] = useState<UpdateMemberProfileInput>({
+    name: member.name,
+    email: member.email,
+    role: member.role,
+  });
+  const isPending = member.status === 'pending';
+  const isOwner = member.role === 'Owner';
+  const normalizedValues = {
+    ...values,
+    name: isPending ? 'Pending invite' : values.name.trim(),
+    email: values.email.trim(),
+    role: isOwner ? 'Owner' : values.role,
+  };
+  const errors = validateMemberProfile(normalizedValues, member, members);
+  const isDirty =
+    normalizedValues.name !== member.name ||
+    normalizedValues.email !== member.email ||
+    normalizedValues.role !== member.role;
+  const canSave = isDirty && Object.keys(errors).length === 0 && !isSaving;
+
+  return (
+    <div className="fixed inset-0 z-40 flex items-end bg-[#172033]/30 px-4 py-6 backdrop-blur sm:items-center sm:justify-center">
+      <Panel className="w-full max-w-lg overflow-hidden">
+        <div className="flex items-start justify-between gap-4 border-b border-[#e4e9ef] p-5 sm:p-6">
+          <div>
+            <p className="text-sm font-medium text-[#64748b]">Team member</p>
+            <h2 className="mt-1 text-xl font-semibold">Edit profile</h2>
+            <p className="mt-2 text-sm leading-6 text-[#475569]">
+              Update identity and access details for this workspace member.
+            </p>
+          </div>
+          <button
+            type="button"
+            className="rounded-md p-2 text-[#64748b] transition hover:bg-[#fff1ee] hover:text-[#c94d38]"
+            aria-label="Close edit profile"
+            disabled={isSaving}
+            onClick={onClose}
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <form
+          className="space-y-5 p-5 sm:p-6"
+          onSubmit={(event) => {
+            event.preventDefault();
+            if (canSave) onSubmit(normalizedValues);
+          }}
+        >
+          <Field label="Name" error={errors.name}>
+            <input
+              className={inputClass}
+              value={values.name}
+              disabled={isPending || isSaving}
+              onChange={(event) => setValues({ ...values, name: event.target.value })}
+            />
+            {isPending ? (
+              <p className="mt-2 text-xs text-[#64748b]">
+                Pending invitations keep this placeholder until accepted.
+              </p>
+            ) : null}
+          </Field>
+
+          <Field label="Email" error={errors.email}>
+            <input
+              className={inputClass}
+              value={values.email}
+              disabled={isSaving}
+              onChange={(event) => setValues({ ...values, email: event.target.value })}
+            />
+          </Field>
+
+          <Field label="Role">
+            <select
+              className={inputClass}
+              value={values.role}
+              disabled={isOwner || isSaving}
+              onChange={(event) =>
+                setValues({ ...values, role: event.target.value as Role })
+              }
+            >
+              {memberRoles.map((roleOption) => (
+                <option key={roleOption}>{roleOption}</option>
+              ))}
+            </select>
+            {isOwner ? (
+              <p className="mt-2 text-xs text-[#64748b]">
+                Workspace owners keep the Owner role.
+              </p>
+            ) : null}
+          </Field>
+
+          {error ? (
+            <p className="rounded-lg bg-[#fff1ee] px-4 py-3 text-sm text-[#c94d38]">
+              {error.message}
+            </p>
+          ) : null}
+
+          <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
+            <Button
+              type="button"
+              variant="ghost"
+              disabled={!isDirty || isSaving}
+              onClick={() =>
+                setValues({
+                  name: member.name,
+                  email: member.email,
+                  role: member.role,
+                })
+              }
+            >
+              <RefreshCw className="h-4 w-4" />
+              Reset
+            </Button>
+            <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+              <Button type="button" variant="secondary" disabled={isSaving} onClick={onClose}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={!canSave}>
+                <Save className="h-4 w-4" />
+                {isSaving ? 'Saving...' : 'Save profile'}
+              </Button>
+            </div>
+          </div>
+        </form>
+      </Panel>
     </div>
   );
 }
@@ -191,12 +392,14 @@ function MemberRow({
   onRoleChange,
   onRemove,
   onResend,
+  onEdit,
 }: {
   member: TeamMember;
   busy: boolean;
   onRoleChange: (role: Role) => void;
   onRemove: () => void;
   onResend: () => void;
+  onEdit: () => void;
 }) {
   const isOwner = member.role === 'Owner';
   const isPending = member.status === 'pending';
@@ -234,6 +437,10 @@ function MemberRow({
             <option key={role}>{role}</option>
           ))}
         </select>
+        <Button variant="secondary" disabled={busy} onClick={onEdit}>
+          <Pencil className="h-4 w-4" />
+          Edit
+        </Button>
         {isPending ? (
           <Button variant="secondary" disabled={busy} onClick={onResend}>
             <RefreshCw className="h-4 w-4" />
