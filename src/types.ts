@@ -21,6 +21,12 @@ export type TeamMember = {
   invitedAt?: string;
 };
 
+export type UpdateMemberProfileInput = {
+  name: string;
+  email: string;
+  role: Role;
+};
+
 export type Integration = {
   id: string;
   name: string;
