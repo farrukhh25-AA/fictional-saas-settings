@@ -1,4 +1,10 @@
-import type { Integration, Profile, Role, TeamMember } from '../types';
+import type {
+  Integration,
+  Profile,
+  Role,
+  TeamMember,
+  UpdateMemberProfileInput,
+} from '../types';
 
 const delay = (ms = 650) => new Promise((resolve) => window.setTimeout(resolve, ms));
 
@@ -131,6 +137,21 @@ export const api = {
     members = members.map((member) =>
       member.id === id ? { ...member, role } : member,
     );
+    return members.find((member) => member.id === id);
+  },
+
+  async updateMemberProfile(id: string, input: UpdateMemberProfileInput) {
+    await delay(750);
+    maybeFail();
+    members = members.map((member) => {
+      if (member.id !== id) return member;
+      return {
+        ...member,
+        email: input.email,
+        name: member.status === 'pending' ? 'Pending invite' : input.name,
+        role: member.role === 'Owner' ? 'Owner' : input.role,
+      };
+    });
     return members.find((member) => member.id === id);
   },
 
