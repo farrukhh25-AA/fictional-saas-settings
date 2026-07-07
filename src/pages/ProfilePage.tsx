@@ -72,7 +72,7 @@ export function ProfilePage() {
     return (
       <Panel className="p-6">
         <h1 className="text-2xl font-semibold">Profile could not load</h1>
-        <p className="mt-2 text-sm text-stone-600">Refresh the mock data and try again.</p>
+        <p className="mt-2 text-sm text-[#475569]">Refresh the mock data and try again.</p>
         <Button className="mt-5" onClick={() => refetch()}>
           Retry
         </Button>
@@ -84,29 +84,29 @@ export function ProfilePage() {
     <div className="space-y-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-medium text-stone-500">Settings</p>
+          <p className="text-sm font-medium text-[#64748b]">Settings</p>
           <h1 className="mt-1 text-3xl font-semibold tracking-tight">Profile and workspace</h1>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-600">
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-[#475569]">
             Keep your personal details and workspace identity current for teammates.
           </p>
         </div>
         {isDirty ? (
-          <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-700">
+          <span className="rounded-full bg-[#fff1ee] px-3 py-1 text-xs font-medium text-[#c94d38]">
             Unsaved changes
           </span>
         ) : null}
       </div>
 
       <Panel>
-        <div className="border-b border-stone-200 p-5 sm:p-6">
+        <div className="border-b border-[#e4e9ef] p-5 sm:p-6">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-            <div className="flex h-20 w-20 items-center justify-center rounded-lg bg-stone-950 text-xl font-semibold text-white">
+            <div className="flex h-20 w-20 items-center justify-center rounded-lg bg-[#f2644b] text-xl font-semibold text-white shadow-sm shadow-[#f2644b]/25">
               {profileInitials || <UserRound className="h-8 w-8" />}
             </div>
             <div>
               <h2 className="text-lg font-semibold">{values.name}</h2>
-              <p className="mt-1 text-sm text-stone-600">{values.email}</p>
-              <p className="mt-2 text-sm text-stone-500">
+              <p className="mt-1 text-sm text-[#475569]">{values.email}</p>
+              <p className="mt-2 text-sm text-[#64748b]">
                 Avatar uses initials in this mock build.
               </p>
             </div>
@@ -177,7 +177,7 @@ export function ProfilePage() {
             />
           </Field>
           {mutation.isError ? (
-            <p className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700">
+            <p className="rounded-lg bg-[#fff1ee] px-4 py-3 text-sm text-[#c94d38]">
               {(mutation.error as Error).message}
             </p>
           ) : null}
