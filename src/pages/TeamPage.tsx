@@ -123,7 +123,7 @@ export function TeamPage() {
         </p>
       </div>
 
-      <div className="grid gap-4">
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_280px]">
         <Panel className="overflow-hidden">
           <div className="flex flex-col gap-3 border-b border-[#e4e9ef] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
             <div>
@@ -183,7 +183,7 @@ export function TeamPage() {
           )}
         </Panel>
 
-        <Panel className="w-full max-w-md self-start p-5 sm:p-6">
+        <Panel className="w-full self-start p-5 sm:max-w-md sm:p-6 xl:sticky xl:top-6 xl:max-w-none">
           <h2 className="text-lg font-semibold">Invite teammate</h2>
           <p className="mt-2 text-sm leading-6 text-[#475569]">
             New invitations stay pending until accepted.
@@ -405,7 +405,7 @@ function MemberRow({
   const isPending = member.status === 'pending';
 
   return (
-    <div className="grid gap-4 p-5 xl:grid-cols-[minmax(0,1fr)_auto] xl:items-center sm:p-6">
+    <div className="grid gap-4 p-5 2xl:grid-cols-[minmax(0,1fr)_auto] 2xl:items-center sm:p-6">
       <div className="flex min-w-0 items-center gap-4">
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#fff1ee] text-sm font-semibold text-[#c94d38]">
           {initials(member.name)}
@@ -426,7 +426,7 @@ function MemberRow({
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2 xl:justify-end">
+      <div className="flex flex-wrap items-center gap-2 2xl:justify-end">
         <select
           className="min-h-10 rounded-lg border border-[#e4e9ef] bg-white px-3 text-sm disabled:bg-[#fafaf8]"
           value={member.role}
