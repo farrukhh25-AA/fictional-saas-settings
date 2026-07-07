@@ -38,9 +38,9 @@ export function IntegrationsPage() {
     <div className="space-y-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-medium text-stone-500">Settings</p>
+          <p className="text-sm font-medium text-[#64748b]">Settings</p>
           <h1 className="mt-1 text-3xl font-semibold tracking-tight">Integrations</h1>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-600">
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-[#475569]">
             Connect the tools your team already uses so knowledge can stay current.
           </p>
         </div>
@@ -56,7 +56,7 @@ export function IntegrationsPage() {
       ) : isError ? (
         <Panel className="p-6">
           <h2 className="font-semibold">Integrations could not load</h2>
-          <p className="mt-2 text-sm text-stone-600">Refresh the mock data and try again.</p>
+          <p className="mt-2 text-sm text-[#475569]">Refresh the mock data and try again.</p>
           <Button className="mt-5" onClick={() => refetch()}>
             Retry
           </Button>
@@ -64,7 +64,7 @@ export function IntegrationsPage() {
       ) : data.length === 0 ? (
         <Panel className="p-8 text-center">
           <h2 className="font-semibold">No integrations available</h2>
-          <p className="mt-2 text-sm text-stone-600">Available connections will appear here.</p>
+          <p className="mt-2 text-sm text-[#475569]">Available connections will appear here.</p>
         </Panel>
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
@@ -85,7 +85,7 @@ export function IntegrationsPage() {
       )}
 
       {connection.isError ? (
-        <p className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700">
+        <p className="rounded-lg bg-[#fff1ee] px-4 py-3 text-sm text-[#c94d38]">
           {(connection.error as Error).message}
         </p>
       ) : null}
@@ -111,23 +111,23 @@ function IntegrationCard({
       <div>
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-stone-100 text-stone-700">
+            <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#fff1ee] text-[#c94d38]">
               <Icon className="h-5 w-5" />
             </div>
             <div>
               <h2 className="font-semibold">{integration.name}</h2>
-              <p className="text-xs text-stone-500">{integration.category}</p>
+              <p className="text-xs text-[#64748b]">{integration.category}</p>
             </div>
           </div>
           <Badge tone={integration.connected ? 'green' : 'neutral'}>
             {integration.connected ? 'Connected' : 'Disconnected'}
           </Badge>
         </div>
-        <p className="mt-4 text-sm leading-6 text-stone-600">{integration.description}</p>
+        <p className="mt-4 text-sm leading-6 text-[#475569]">{integration.description}</p>
       </div>
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-xs text-stone-500">Last sync: {formatSyncTime(integration.lastSync)}</p>
+        <p className="text-xs text-[#64748b]">Last sync: {formatSyncTime(integration.lastSync)}</p>
         <Button
           variant={integration.connected ? 'secondary' : 'primary'}
           disabled={busy}
