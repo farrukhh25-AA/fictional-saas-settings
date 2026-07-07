@@ -16,7 +16,7 @@ const validateMemberProfile = (
   members: TeamMember[],
 ) => {
   const errors: Partial<Record<keyof UpdateMemberProfileInput, string>> = {};
-  if (member.status === 'active' && !values.name.trim()) {
+  if (!values.name.trim()) {
     errors.name = 'Enter a name.';
   }
   if (!/^\S+@\S+\.\S+$/.test(values.email)) {
@@ -265,7 +265,7 @@ function EditMemberModal({
   const isOwner = member.role === 'Owner';
   const normalizedValues = {
     ...values,
-    name: isPending ? 'Pending invite' : values.name.trim(),
+    name: values.name.trim(),
     email: values.email.trim(),
     role: isOwner ? 'Owner' : values.role,
   };
@@ -309,12 +309,12 @@ function EditMemberModal({
             <input
               className={inputClass}
               value={values.name}
-              disabled={isPending || isSaving}
+              disabled={isSaving}
               onChange={(event) => setValues({ ...values, name: event.target.value })}
             />
             {isPending ? (
               <p className="mt-2 text-xs text-[#64748b]">
-                Pending invitations keep this placeholder until accepted.
+                This name appears in the members list while the invite is pending.
               </p>
             ) : null}
           </Field>
@@ -408,7 +408,7 @@ function MemberRow({
     <div className="grid gap-4 p-5 xl:grid-cols-[minmax(0,1fr)_auto] xl:items-center sm:p-6">
       <div className="flex min-w-0 items-center gap-4">
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#fff1ee] text-sm font-semibold text-[#c94d38]">
-          {isPending ? 'PI' : initials(member.name)}
+          {initials(member.name)}
         </div>
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
