@@ -30,7 +30,7 @@ export function SettingsLayout() {
   return (
     <div className="min-h-screen bg-[#fafaf8] text-[#172033]">
       <header className="border-b border-[#e4e9ef]/90 bg-[#fafaf8]/90 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-[96rem] items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#f2644b] text-white shadow-sm shadow-[#f2644b]/25">
               <Blocks className="h-5 w-5" />
@@ -47,7 +47,7 @@ export function SettingsLayout() {
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[280px_1fr] lg:px-8">
+      <div className="mx-auto grid max-w-[96rem] gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:px-8">
         <aside className="lg:sticky lg:top-6 lg:self-start">
           <div className="rounded-lg border border-[#e4e9ef] bg-white p-2 shadow-sm shadow-slate-950/[0.06]">
             <button
