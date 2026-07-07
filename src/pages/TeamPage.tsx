@@ -80,19 +80,19 @@ export function TeamPage() {
   return (
     <div className="space-y-5">
       <div>
-        <p className="text-sm font-medium text-stone-500">Settings</p>
+        <p className="text-sm font-medium text-[#64748b]">Settings</p>
         <h1 className="mt-1 text-3xl font-semibold tracking-tight">Team members</h1>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-600">
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-[#475569]">
           Manage access, send invitations, and keep roles aligned with how your team works.
         </p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-[1fr_320px]">
         <Panel className="overflow-hidden">
-          <div className="flex flex-col gap-3 border-b border-stone-200 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <div className="flex flex-col gap-3 border-b border-[#e4e9ef] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
             <div>
               <h2 className="text-lg font-semibold">People</h2>
-              <p className="mt-1 text-sm text-stone-500">
+              <p className="mt-1 text-sm text-[#64748b]">
                 {activeCount} active, {pendingCount} pending
               </p>
             </div>
@@ -111,17 +111,17 @@ export function TeamPage() {
           ) : isError ? (
             <div className="p-6">
               <h3 className="font-semibold">Team data could not load</h3>
-              <p className="mt-2 text-sm text-stone-600">Try refreshing the mock service.</p>
+              <p className="mt-2 text-sm text-[#475569]">Try refreshing the mock service.</p>
             </div>
           ) : data.length === 0 ? (
             <div className="p-8 text-center">
               <h3 className="font-semibold">No members yet</h3>
-              <p className="mt-2 text-sm text-stone-600">
+              <p className="mt-2 text-sm text-[#475569]">
                 Invite your first teammate to start building the workspace.
               </p>
             </div>
           ) : (
-            <div className="divide-y divide-stone-200">
+            <div className="divide-y divide-[#e4e9ef]">
               {data.map((member) => (
                 <MemberRow
                   key={member.id}
@@ -144,7 +144,7 @@ export function TeamPage() {
 
         <Panel className="self-start p-5 sm:p-6">
           <h2 className="text-lg font-semibold">Invite teammate</h2>
-          <p className="mt-2 text-sm leading-6 text-stone-600">
+          <p className="mt-2 text-sm leading-6 text-[#475569]">
             New invitations stay pending until accepted.
           </p>
           <form className="mt-5 space-y-4" onSubmit={submitInvite}>
@@ -168,7 +168,7 @@ export function TeamPage() {
               </select>
             </Field>
             {invite.isError ? (
-              <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">
+              <p className="rounded-lg bg-[#fff1ee] px-3 py-2 text-sm text-[#c94d38]">
                 {(invite.error as Error).message}
               </p>
             ) : null}
@@ -204,7 +204,7 @@ function MemberRow({
   return (
     <div className="grid gap-4 p-5 sm:grid-cols-[1fr_auto] sm:items-center sm:p-6">
       <div className="flex min-w-0 items-center gap-4">
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-stone-100 text-sm font-semibold text-stone-700">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#fff1ee] text-sm font-semibold text-[#c94d38]">
           {isPending ? 'PI' : initials(member.name)}
         </div>
         <div className="min-w-0">
@@ -214,8 +214,8 @@ function MemberRow({
               {isPending ? 'Pending' : 'Active'}
             </Badge>
           </div>
-          <p className="mt-1 truncate text-sm text-stone-600">{member.email}</p>
-          <p className="mt-1 text-xs text-stone-500">
+          <p className="mt-1 truncate text-sm text-[#475569]">{member.email}</p>
+          <p className="mt-1 text-xs text-[#64748b]">
             {isPending
               ? `Invited ${formatDate(member.invitedAt)}`
               : `Joined ${formatDate(member.joinedAt)}`}
@@ -225,7 +225,7 @@ function MemberRow({
 
       <div className="flex flex-wrap items-center gap-2 sm:justify-end">
         <select
-          className="min-h-10 rounded-lg border border-stone-200 bg-white px-3 text-sm disabled:bg-stone-50"
+          className="min-h-10 rounded-lg border border-[#e4e9ef] bg-white px-3 text-sm disabled:bg-[#fafaf8]"
           value={member.role}
           disabled={isOwner || busy}
           onChange={(event) => onRoleChange(event.target.value as Role)}
