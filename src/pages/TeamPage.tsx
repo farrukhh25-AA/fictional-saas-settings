@@ -123,7 +123,7 @@ export function TeamPage() {
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-[1fr_320px]">
+      <div className="grid gap-4 2xl:grid-cols-[minmax(0,1fr)_300px]">
         <Panel className="overflow-hidden">
           <div className="flex flex-col gap-3 border-b border-[#e4e9ef] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
             <div>
@@ -405,7 +405,7 @@ function MemberRow({
   const isPending = member.status === 'pending';
 
   return (
-    <div className="grid gap-4 p-5 sm:grid-cols-[1fr_auto] sm:items-center sm:p-6">
+    <div className="grid gap-4 p-5 xl:grid-cols-[minmax(0,1fr)_auto] xl:items-center sm:p-6">
       <div className="flex min-w-0 items-center gap-4">
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#fff1ee] text-sm font-semibold text-[#c94d38]">
           {isPending ? 'PI' : initials(member.name)}
@@ -426,7 +426,7 @@ function MemberRow({
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2 sm:justify-end">
+      <div className="flex flex-wrap items-center gap-2 xl:justify-end">
         <select
           className="min-h-10 rounded-lg border border-[#e4e9ef] bg-white px-3 text-sm disabled:bg-[#fafaf8]"
           value={member.role}
