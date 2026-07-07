@@ -8,6 +8,14 @@ import type {
 
 const delay = (ms = 650) => new Promise((resolve) => window.setTimeout(resolve, ms));
 
+const nameFromEmail = (email: string) =>
+  email
+    .split('@')[0]
+    .split(/[._-]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ') || 'Invited teammate';
+
 let profile: Profile = {
   name: 'Maya Chen',
   email: 'maya@northstar.ai',
@@ -44,7 +52,7 @@ let members: TeamMember[] = [
   },
   {
     id: 'inv-1',
-    name: 'Pending invite',
+    name: 'Lena Ortiz',
     email: 'lena@northstar.ai',
     role: 'Viewer',
     status: 'pending',
@@ -121,7 +129,7 @@ export const api = {
     maybeFail();
     const invitation: TeamMember = {
       id: `inv-${Date.now()}`,
-      name: 'Pending invite',
+      name: nameFromEmail(input.email),
       email: input.email,
       role: input.role,
       status: 'pending',
@@ -148,7 +156,7 @@ export const api = {
       return {
         ...member,
         email: input.email,
-        name: member.status === 'pending' ? 'Pending invite' : input.name,
+        name: input.name,
         role: member.role === 'Owner' ? 'Owner' : input.role,
       };
     });
